@@ -11,9 +11,9 @@ from selenium.webdriver.support import expected_conditions as EC
 load_dotenv()
 
 options = webdriver.ChromeOptions()
-options.add_argument('--disable-gpu');
-options.add_argument('--disable-extensions');
-options.add_argument('--start-maximized');
+options.add_argument('--disable-gpu')
+options.add_argument('--disable-extensions')
+options.add_argument('--start-maximized')
 options.add_experimental_option("excludeSwitches", ['enable-automation'])
 
 chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
@@ -25,7 +25,6 @@ service = Service(executable_path=chromedriver_path)
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.set_page_load_timeout(30)
-# driver.implicitly_wait(5)
 
 driver.get(obicnet_url)
 
