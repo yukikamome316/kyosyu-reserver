@@ -1,11 +1,25 @@
 import os
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from reserable_elements import get_reserable_xpath
+
+
+def get_reserable_selenium(driver, conditions, eager):
+  e_selection_xpaths = get_reserable_xpath(driver.page_source, conditions, eager)
+
+  results = []
+  for e_selection_xpath in e_selection_xpaths:
+    # XPathを使用して完全に一致するテキストを持つ要素を検索
+    element = driver.find_element(By.XPATH, e_selection_xpath)
+    results.append(element)
+  return results
+
 
 # .envファイルの読み込み
 load_dotenv()
@@ -14,6 +28,14 @@ options = webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 options.add_argument('--disable-extensions')
 options.add_argument('--start-maximized')
+
+# options.add_argument("--headless")
+# options.add_argument("--hide-scrollbars")
+# options.add_argument("--single-process")
+# options.add_argument("--ignore-certificate-errors")
+# options.add_argument("--window-size=880x996")
+# options.add_argument("--no-sandbox")
+
 options.add_experimental_option("excludeSwitches", ['enable-automation'])
 
 chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
@@ -67,11 +89,17 @@ for i in range(len(teachers)):
   e_search_button = driver.find_element(By.ID, 'btnSearch')
   e_search_button.click()
 
-  # print(driver.page_source)
   e_teacher_select_input = wait.until(EC.presence_of_element_located((By.XPATH, "//div[@class='page'][@index='0']")))
   e_teacher_select_input.click()
 
 e_button_commit = wait.until(EC.presence_of_element_located((By.ID, 'btnCommit')))
 e_button_commit.click()
 
-# driver.save_screenshot('screenshot.png')
+# 予約可能な日付を取得できるようになるまで待機
+_ = wait.until(EC.presence_of_element_located((By.ID, 'ddlWeeks')))
+
+# 条件に合う予約可能な時間帯を取得
+conditions = ["09:00", "16:00"]
+eager = False
+
+results = get_reserable_selenium(driver, conditions, eager)
