@@ -12,7 +12,7 @@ def get_reserable_xpath(contents: str, time: list[str], eager: bool) -> list[str
 
   soup = BeautifulSoup(contents, 'html.parser')
   time_slots = []
-  i = 0
+  i = 1 # 当日分は検索対象から外す
 
   while True:
     input_tag = soup.find('input', {'id': f'lst_ih_{i}'})
