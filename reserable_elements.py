@@ -28,6 +28,9 @@ def get_reserable_xpath(contents: str, time: list[str], eager: bool) -> list[str
     if not date_tag:
       i += 1
       continue
+    
+    # 日付の一覧を表示
+    # print(date_tag.text.strip())
 
     badge = div_tag.find('span', {'class': ['badge', 'badge badge_pink']})
     if not badge or badge.text.strip() != "空":
