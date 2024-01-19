@@ -99,7 +99,13 @@ e_button_commit.click()
 _ = wait.until(EC.presence_of_element_located((By.ID, 'ddlWeeks')))
 
 # 条件に合う予約可能な時間帯を取得
-conditions = ["09:00", "16:00"]
+conditions = ["14:50", "15:50", "16:50", "09:00", "10:00", "11:00", "12:00", "13:50"]
 eager = False
 
 results = get_reserable_selenium(driver, conditions, eager)
+
+if len(results) > 0:
+  action = webdriver.common.action_chains.ActionChains(driver)
+  action.move_to_element_with_offset(results[0], 5, 5)
+  action.click()
+  action.perform()
