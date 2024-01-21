@@ -40,6 +40,8 @@ def get_reserable_xpath(contents: str, time: list[str], eager: bool) -> list[str
     date_div = div_tag.find_next_sibling('div')
     time_info = date_div.find_all('div', {'class': 'blocks'})
 
+    print(f"date: {date_tag.text.strip()}")
+    
     if time_info:
       for e in time_info:
         time_range = e.find_all('span', {'class': 'lbl'})
@@ -47,6 +49,9 @@ def get_reserable_xpath(contents: str, time: list[str], eager: bool) -> list[str
         end_time = time_range[4].text
         status = time_range[5].text.strip()
         e_selection = e.parent
+
+        print(f"  time: {start_time} ~ {end_time}, status: {status}")
+        
         time_slots.append((start_time, status, xpath_soup(e_selection)))
     i += 1
 
